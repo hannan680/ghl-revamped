@@ -113,7 +113,7 @@ import { useMutation } from "@tanstack/react-query";
 
 
 type ChatGPTRequestParams = {
-  message: string;
+  message: unknown;
   onChunk: (chunk: string) => void;
   threadId: string | null;
   setThreadId: (id: string) => void;
@@ -126,7 +126,7 @@ type ChatGPTResponse = {
 };
 
 const chatGPTRequest = async (
-  message: string,
+  message: unknown,
   onChunk: (chunk: string) => void,
   threadId: string | null,
   setThreadId: (id: string) => void,

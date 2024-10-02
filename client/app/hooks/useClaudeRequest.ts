@@ -101,8 +101,8 @@ import { useMutation } from "@tanstack/react-query";
 
 
 type ClaudeRequestParams = {
-  message: string;
-  previousMessages: string[];
+  message: unknown;
+  previousMessages: unknown[];
   onChunk: (chunk: string) => void;
   apiKey: string;
 };
@@ -113,8 +113,8 @@ type ClaudeResponse = {
 };
 
 const claudeRequest = async (
-  message: string,
-  previousMessages: string[],
+  message: unknown,
+  previousMessages: unknown[],
   onChunk: (chunk: string) => void,
   apiKey: string
 ): Promise<ClaudeResponse> => {

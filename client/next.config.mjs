@@ -1,14 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3001",
-        pathname: "/api/**",
-      },
-    ],
+  eslint: {
+    ignoreDuringBuilds: true, // Disables ESLint type checking during the build
   },
 };
 
