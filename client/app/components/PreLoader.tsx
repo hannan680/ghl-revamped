@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './preLoader.module.css'; 
+import styles from './preloader.module.css'; 
 
 function PreLoader() {
   return (
