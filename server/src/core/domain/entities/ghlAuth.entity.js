@@ -170,6 +170,7 @@
 
 const axios = require("axios");
 const {
+  GHLError,
   GHLAuthError,
   GHLResourceNotFoundError,
   GHLTokenRefreshError,

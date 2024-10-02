@@ -6,7 +6,7 @@ const { AppError, catchAsync } = require("../../../core/utils/errorHandler");
 // Create an instance of GHLAuth
 const ghlAuth = new GHLAuth(Location);
 
-exports.install = catchAsync(async (req, res) => {
+exports.install = catchAsync(async (req, res, next) => {
   const CLIENT_ID = process.env.GHL_APP_CLIENT_ID;
   const REDIRECT_URI = process.env.REDIRECT_URI;
   const SCOPE = process.env.GHL_APP_SCOPE;
@@ -20,7 +20,7 @@ exports.install = catchAsync(async (req, res) => {
   res.redirect(authUrl);
 });
 
-exports.authorize = catchAsync(async (req, res) => {
+exports.authorize = catchAsync(async (req, res, next) => {
   const { code } = req.query;
 
   if (!code) {
@@ -72,7 +72,7 @@ exports.authorize = catchAsync(async (req, res) => {
   // });
 });
 
-exports.authorizeLocation = catchAsync(async (req, res) => {
+exports.authorizeLocation = catchAsync(async (req, res, next) => {
   const { companyId, locationId } = req.query;
 
   if (!companyId || !locationId) {
@@ -106,14 +106,14 @@ exports.authorizeLocation = catchAsync(async (req, res) => {
   });
 });
 
-exports.decryptSSO = catchAsync(async (req, res) => {
+exports.decryptSSO = catchAsync(async (req, res, next) => {
   const { key } = req.body;
 
   if (!key) {
     throw new AppError("Please send a valid key", 400);
   }
 
-  const data = decryptSSOData(key);
+  const data = await decryptSSOData(key);
 
   if (data.activeLocation) {
     const location = await Location.findOne({
@@ -122,14 +122,15 @@ exports.decryptSSO = catchAsync(async (req, res) => {
     });
 
     if (!location) {
-      await this.authorizeLocation(
-        {
-          query: {
-            companyId: data.companyId,
-            locationId: data.activeLocation,
-          },
-        },
-        res
+      // await this.authorizeLocation({
+      //   query: {
+      //     companyId: data.companyId,
+      //     locationId: data.activeLocation,
+      //   },
+      // });
+      await getAndUpdateLocationAccessToken(
+        data.companyId,
+        data.activeLocation
       );
     }
   }
@@ -139,3 +140,27 @@ exports.decryptSSO = catchAsync(async (req, res) => {
     data: data,
   });
 });
+
+const getAndUpdateLocationAccessToken = async (companyId, locationId) => {
+  const data = await ghlAuth.getLocationAccessToken(companyId, locationId);
+
+  const { access_token, refresh_token, scope, expires_in, userType } = data;
+
+  const updateData = {
+    access_token,
+    refresh_token,
+    scope,
+    expires_in,
+    userType,
+    companyId,
+    locationId,
+  };
+
+  const updatedLocation = await Location.findOneAndUpdate(
+    { locationId },
+    updateData,
+    { new: true, upsert: true }
+  );
+
+  return updatedLocation;
+};

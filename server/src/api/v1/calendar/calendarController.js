@@ -9,7 +9,7 @@ const ghlAuth = new GHLAuth(Location);
 const ghlCalendar = new GHLCalendar(ghlAuth);
 const ghlCustomValue = new GHLCustomValue(ghlAuth);
 
-exports.getCalendars = catchAsync(async (req, res) => {
+exports.getCalendars = catchAsync(async (req, res, next) => {
   const { locationId } = req.query;
   console.log(locationId);
   // Validate locationId

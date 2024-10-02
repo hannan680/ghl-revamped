@@ -21,7 +21,7 @@ app.use(helmet());
 
 // Body parser
 app.use(express.json());
-app.use("/api/images/bots", express.static(path.join(__dirname, "../bots")));
+app.use("/api/bots", express.static(path.join(__dirname, "../bots")));
 
 // Request logging
 app.use(morgan("combined"));

@@ -129,7 +129,11 @@ class AppError extends Error {
 
 const catchAsync = (fn) => {
   return (req, res, next) => {
-    fn(req, res, next).catch(next);
+    fn(req, res, next).catch((error) => {
+      console.log(next);
+      console.error("Caught an error:", error); // Log the error
+      next(error); // Pass the error to the next middleware (usually the error handler)
+    });
   };
 };
 
@@ -199,6 +203,7 @@ const errorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
+  console.log(err);
   if (process.env.NODE_ENV === "development") {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {

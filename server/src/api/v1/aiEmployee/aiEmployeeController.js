@@ -45,7 +45,7 @@ exports.createAiEmployee = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllAiEmployees = catchAsync(async (req, res) => {
+exports.getAllAiEmployees = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(req.query, AiEmployee.find())
     .filter()
     .sort()
@@ -65,7 +65,7 @@ exports.getAllAiEmployees = catchAsync(async (req, res) => {
   });
 });
 
-exports.getDraftEmployees = catchAsync(async (req, res) => {
+exports.getDraftEmployees = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(
     req.query,
     AiEmployee.find({ status: "draft" })
@@ -89,7 +89,7 @@ exports.getDraftEmployees = catchAsync(async (req, res) => {
   });
 });
 
-exports.getPublishedEmployees = catchAsync(async (req, res) => {
+exports.getPublishedEmployees = catchAsync(async (req, res, next) => {
   const features = new ApiFeatures(
     req.query,
     AiEmployee.find({ status: "published" })
