@@ -64,11 +64,12 @@ exports.authorize = catchAsync(async (req, res) => {
     throw new AppError("No locationId or companyId provided", 400);
   }
 
-  res.status(200).json({
-    status: "success",
-    message: "Authorization successful and data saved.",
-    data: updateResult,
-  });
+  res.send("Authorization successful and data saved.");
+  // res.status(200).json({
+  //   status: "success",
+  //   message: "Authorization successful and data saved.",
+  //   data: updateResult,
+  // });
 });
 
 exports.authorizeLocation = catchAsync(async (req, res) => {

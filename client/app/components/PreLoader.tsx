@@ -1,6 +1,5 @@
 import React from 'react';
-import styles from './PreLoader.module.css'; // Import the CSS module
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import styles from './preLoader.module.css'; 
 
 function PreLoader() {
   return (
